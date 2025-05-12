@@ -1,6 +1,6 @@
 # InventoryZen
 
-A modern, responsive subscription management UI built with React and Tailwind CSS (CDN), closely following the provided Figma design.
+A modern, responsive subscription management UI built with React and Tailwind CSS , closely following the provided Figma design.
 
 ## Features
 - Responsive sidebar with active tab highlighting

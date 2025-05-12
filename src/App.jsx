@@ -1,24 +1,42 @@
 import { useState } from 'react';
-import { Home, LayoutDashboard, Package, BarChart2, Info, Star, Lightbulb, Infinity as InfinityIcon, AlertTriangle, ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
+import {
+  Home, LayoutDashboard, Package, BarChart2, Info, Star,
+  Lightbulb, Infinity as InfinityIcon, AlertTriangle,
+  ChevronLeft, ChevronRight, HelpCircle, Menu
+} from 'lucide-react';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("subscription");
-  
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen">
+      {/* Mobile Header */}
+      <div className="flex items-center justify-between md:hidden p-4 bg-[rgb(237,234,255)]">
+        <h1 className="font-bold text-lg">ClothesInventory</h1>
+        <button onClick={() => setSidebarOpen(!sidebarOpen)}>
+          <Menu size={24} className="text-black" />
+        </button>
+      </div>
+
       {/* Sidebar */}
-      <div className="bg-[rgb(237,234,255)] w-full md:w-64 p-6 flex flex-col justify-between min-h-screen">
+      <div className={`bg-[rgb(237,234,255)] w-full md:w-64 p-6 flex-col justify-between min-h-[auto] md:min-h-screen z-10 transition-transform duration-300 md:flex ${sidebarOpen ? 'flex' : 'hidden'}`}>
         <div>
-          <h1 className="font-bold text-lg mb-8">ClothesInventory</h1>
+          <h1 className="font-bold text-lg mb-8 hidden md:block">ClothesInventory</h1>
           <nav className="space-y-1">
-            <NavItem icon={<Home size={18} />} text="Home" />
-            <NavItem icon={<LayoutDashboard size={18} />} text="Dashboard" active />
-            <NavItem icon={<Package size={18} />} text="Inventory" />
-            <NavItem icon={<BarChart2 size={18} />} text="Reports" />
-            <NavItem icon={<Info size={18} />} text="About" />
+          <NavItem icon={<Home size={18} />} text="Home" />
+          <NavItem
+        icon={<LayoutDashboard size={18} />}
+           text="Dashboard"
+        active={currentPage === "subscription"}
+  onClick={() => setCurrentPage("subscription")}
+/>
+<NavItem icon={<Package size={18} />} text="Inventory" />
+<NavItem icon={<BarChart2 size={18} />} text="Reports" />
+<NavItem icon={<Info size={18} />} text="About" />
           </nav>
         </div>
-        <div className="mb-2">
+        <div className="mb-2 mt-6">
           <div className="bg-white rounded-xl p-3 flex items-center shadow-sm">
             <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center mr-3">
               <span className="text-xs">AM</span>
@@ -32,7 +50,7 @@ export default function App() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 bg-white p-8 md:p-12">
+      <div className="flex-1 bg-white p-4 sm:p-6 md:p-8 lg:p-12">
         {currentPage === "subscription" ? (
           <SubscriptionPage onUpgrade={() => setCurrentPage("upgrade")} />
         ) : (
@@ -43,14 +61,18 @@ export default function App() {
   );
 }
 
-function NavItem({ icon, text, active = false }) {
+function NavItem({ icon, text, active = false, onClick }) {
   return (
-    <div className={`flex items-center px-4 py-3 rounded-lg cursor-pointer ${active ? 'bg-[#edeaff] text-black font-bold' : 'text-black hover:bg-[#edeaff]'} transition-colors`}>
+    <div
+      onClick={onClick}
+      className={`flex items-center px-4 py-3 rounded-lg cursor-pointer ${active ? 'bg-[#edeaff] text-black font-bold' : 'text-black hover:bg-[#edeaff]'} transition-colors`}
+    >
       <span className="mr-3">{icon}</span>
       <span className="text-sm">{text}</span>
     </div>
   );
 }
+
 
 function SubscriptionPage({ onUpgrade }) {
   return (
@@ -166,15 +188,26 @@ function SubscriptionPage({ onUpgrade }) {
       </div>
       
       <h2 className="text-lg font-medium mb-4">Support</h2>
-      <div className="bg-[rgb(237,234,255)] p-4 rounded-xl flex items-center">
-        <div className="mr-4">
-          <HelpCircle className="text-[#6c47ff] bg-white rounded-full p-2" size={32} />
-        </div>
-        <div>
-          <p className="font-semibold text-base mb-1">Need Help? Contact Support</p>
-          <p className="text-sm text-gray-500">Chat or visit Help Center</p>
-        </div>
-      </div>
+<div className="bg-[rgb(237,234,255)] p-4 rounded-xl flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+  <div className="flex items-center">
+    <div className="mr-4 shrink-0">
+      <HelpCircle className="text-[#6c47ff] bg-white rounded-full p-2" size={32} />
+    </div>
+    <div>
+      <p className="font-semibold text-base mb-1">Need Help? Contact Support</p>
+      <p className="text-sm text-gray-500">Chat or visit Help Center</p>
+    </div>
+  </div>
+  <div className="flex space-x-2 self-start sm:self-auto">
+    <button className="p-2 border rounded-lg">
+      <ChevronLeft size={20} />
+    </button>
+    <button className="p-2 border rounded-lg">
+      <ChevronRight size={20} />
+    </button>
+  </div>
+</div>
+
     </div>
   );
 }
